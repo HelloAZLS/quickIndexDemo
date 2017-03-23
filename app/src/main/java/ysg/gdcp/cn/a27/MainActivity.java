@@ -1,9 +1,14 @@
 package ysg.gdcp.cn.a27;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
+import android.view.animation.OvershootInterpolator;
 import android.widget.ListView;
+import android.widget.TextView;
+
+import com.nineoldandroids.view.ViewHelper;
+import com.nineoldandroids.view.ViewPropertyAnimator;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -15,6 +20,7 @@ public class MainActivity extends AppCompatActivity {
 
     private QuickIndexBar quickIndexBar;
     private ListView mMainLv;
+    private TextView tvWord;
     private ArrayList<Friend> friends = new ArrayList<Friend>();
 
     @Override
@@ -29,19 +35,51 @@ public class MainActivity extends AppCompatActivity {
     private void initData() {
         fillList();
         Collections.sort(friends);
-        mMainLv.setAdapter(new MyAdapter(this,friends));
+        mMainLv.setAdapter(new MyAdapter(this, friends));
     }
 
     private void initViews() {
         quickIndexBar = (QuickIndexBar) findViewById(R.id.quickindexbar);
         mMainLv = (ListView) findViewById(R.id.main_lv);
+        tvWord = (TextView) findViewById(R.id.word);
         quickIndexBar.setOnTouchLeteerListener(new QuickIndexBar.onTouchLeteerListener() {
             @Override
             public void onTouchLetter(String word) {
-                Log.i("niaho", word);
+                for (int i = 0; i < friends.size(); i++) {
+                    String firstWord = friends.get(i).getPinYin().charAt(0) + "";
+                    if (firstWord.equals(word)) {
+                        mMainLv.setSelection(i);
+                        break;
+                    }
+                }
+                showCurrentWord(word);
             }
         });
+        ViewHelper.setScaleX(tvWord, 0);
+        ViewHelper.setScaleY(tvWord, 0);
 
+    }
+
+    private Handler handler = new Handler();
+    private boolean isExcuteAnim = false;
+
+    private void showCurrentWord(String word) {
+        //  tvWord.setVisibility(View.VISIBLE);
+        tvWord.setText(word);
+        if (!isExcuteAnim) {
+            isExcuteAnim = true;
+            ViewPropertyAnimator.animate(tvWord).scaleX(1f).setInterpolator(new OvershootInterpolator()).setDuration(550).start();
+            ViewPropertyAnimator.animate(tvWord).scaleY(1f).setInterpolator(new OvershootInterpolator()).setDuration(550).start();
+        }
+        handler.removeCallbacksAndMessages(null);
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                ViewPropertyAnimator.animate(tvWord).scaleX(0f).setDuration(550).start();
+                ViewPropertyAnimator.animate(tvWord).scaleY(0f).setDuration(550).start();
+                isExcuteAnim=false;
+            }
+        }, 1500);
     }
 
     private void fillList() {

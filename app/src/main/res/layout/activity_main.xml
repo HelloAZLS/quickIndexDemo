@@ -5,14 +5,28 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="ysg.gdcp.cn.a27.MainActivity">
+
     <ListView
         android:id="@+id/main_lv"
         android:layout_width="match_parent"
         android:layout_height="match_parent"></ListView>
-<ysg.gdcp.cn.a27.ui.QuickIndexBar
-    android:layout_width="50dp"
-    android:background="#ff3c65"
-    android:id="@+id/quickindexbar"
+
+    <ysg.gdcp.cn.a27.ui.QuickIndexBar
+        android:id="@+id/quickindexbar"
+        android:layout_width="50dp"
+        android:layout_height="match_parent"
         android:layout_alignParentRight="true"
-    android:layout_height="match_parent" />
+        android:background="#ff3c65" />
+
+    <TextView
+        android:layout_width="110dp"
+        android:layout_height="110dp"
+        android:layout_centerInParent="true"
+        android:background="@drawable/bg"
+        android:gravity="center"
+        android:id="@+id/word"
+        android:text="A"
+        android:textColor="#fff"
+        android:textSize="50sp"
+        android:textStyle="bold" />
 </RelativeLayout>

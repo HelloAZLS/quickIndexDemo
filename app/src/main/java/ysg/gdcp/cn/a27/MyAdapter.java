@@ -47,7 +47,19 @@ class MyAdapter extends BaseAdapter {
         ViewHolder holder = ViewHolder.getHolder(convertView);
         Friend friend = friends.get(position);
         holder.tvName.setText(friend.getName());
-        holder.tvFirstWord.setText(friend.getPinYin());
+        String currentWord =friend.getPinYin().charAt(0)+"";
+        if (position>0){
+            String lastWord =friends.get(position-1).getPinYin().charAt(0)+"";
+            if (currentWord.equals(lastWord)){
+                holder.tvFirstWord.setVisibility(View.GONE);
+            }else{
+                holder.tvFirstWord.setVisibility(View.VISIBLE);
+                holder.tvFirstWord.setText(currentWord);
+            }
+        }else{
+            holder.tvFirstWord.setVisibility(View.VISIBLE);
+            holder.tvFirstWord.setText(currentWord);
+        }
         return convertView;
     }
 
